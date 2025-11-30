@@ -1,151 +1,124 @@
-# Backend Deployment Anleitung
+# Backend Deployment Anleitung - RENDER (KOSTENLOS)
 
-Diese Anleitung zeigt dir Schritt für Schritt, wie du das Backend kostenlos auf Render deployen kannst.
+Diese Anleitung zeigt dir Schritt für Schritt, wie du das Backend **kostenlos** auf Render deployen kannst.
 
-## Option 1: Render (KOSTENLOS - Empfohlen)
-
-### Schritt 1: Railway-Account erstellen
-
-1. Gehe zu [Railway](https://railway.app)
-2. Klicke auf "Start a New Project"
-3. Melde dich mit GitHub an (empfohlen) oder erstelle einen Account
-
-### Schritt 2: Neues Projekt erstellen
-
-1. Klicke auf "New Project"
-2. Wähle "Deploy from GitHub repo"
-3. Wähle dein Repository: `KaiHnieda/grooop`
-4. Railway erkennt automatisch, dass es ein Monorepo ist
-
-### Schritt 3: Backend-Service konfigurieren
-
-1. Railway fragt, welchen Service du deployen möchtest
-2. Wähle **"Configure Service"** oder **"Add Service"**
-3. Wähle **"Empty Service"** oder **"Node.js"**
-4. In den Service-Einstellungen:
-   - **Root Directory**: `backend`
-   - **Build Command**: `npm install && npm run build && npx prisma generate`
-   - **Start Command**: `npm start`
-
-### Schritt 4: Environment Variables setzen
-
-1. Gehe zu den **Variables** in deinem Railway-Service
-2. Füge folgende Environment Variables hinzu:
-
-```
-DATABASE_URL=postgresql://user:password@host:5432/dbname
-JWT_SECRET=<generiere-ein-sicheres-secret-mindestens-32-zeichen>
-PORT=3001
-NODE_ENV=production
-FRONTEND_URL=https://deine-netlify-url.netlify.app
-```
-
-**Wichtig:**
-- **DATABASE_URL**: Railway bietet eine PostgreSQL-Datenbank an. Klicke auf "Add PostgreSQL" im Service, dann wird die `DATABASE_URL` automatisch gesetzt
-- **JWT_SECRET**: Generiere ein sicheres Secret (mindestens 32 Zeichen). Du kannst z.B. verwenden:
-  ```bash
-  node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-  ```
-- **FRONTEND_URL**: Ersetze mit deiner tatsächlichen Netlify-URL (z.B. `https://voluble-sawine-19bcc7.netlify.app`)
-
-### Schritt 5: PostgreSQL-Datenbank hinzufügen
-
-1. In deinem Railway-Service, klicke auf **"Add Service"**
-2. Wähle **"PostgreSQL"**
-3. Railway erstellt automatisch eine Datenbank
-4. Die `DATABASE_URL` wird automatisch als Environment Variable gesetzt
-
-### Schritt 6: Prisma Migration ausführen
-
-1. Öffne die **Railway CLI** oder verwende das **Railway Dashboard**
-2. Führe die Migration aus:
-   ```bash
-   railway run --service backend npx prisma migrate deploy
-   ```
-   Oder im Railway Dashboard:
-   - Gehe zu deinem Backend-Service
-   - Klicke auf "Deployments" → "Latest"
-   - Öffne die "Shell" oder "Logs"
-   - Führe aus: `npx prisma migrate deploy`
-
-### Schritt 7: Backend-URL finden
-
-1. Nach dem Deployment zeigt Railway eine URL an (z.B. `https://backend-production-xxxx.up.railway.app`)
-2. Kopiere diese URL - du brauchst sie für Netlify
-
-### Schritt 8: Environment Variables in Netlify setzen
-
-1. Gehe zu deinem Netlify-Dashboard
-2. Öffne: **Site settings → Environment variables**
-3. Füge hinzu:
-   ```
-   VITE_API_URL=https://deine-railway-url.up.railway.app/api
-   VITE_SOCKET_URL=https://deine-railway-url.up.railway.app
-   ```
-4. Ersetze `deine-railway-url.up.railway.app` mit deiner tatsächlichen Railway-URL
-
-### Schritt 9: Frontend neu deployen
-
-Netlify deployt automatisch neu, oder klicke auf "Trigger deploy" → "Deploy site"
+**Render Free Plan:**
+- ✅ 750 Stunden Laufzeit pro Monat (genug für 24/7 Betrieb)
+- ✅ Kostenlose PostgreSQL-Datenbank
+- ✅ Automatische Deployments von GitHub
+- ✅ SSL-Zertifikate inklusive
 
 ---
 
-## Option 2: Render (Alternative)
-
-### Schritt 1: Render-Account erstellen
+## Schritt 1: Render-Account erstellen
 
 1. Gehe zu [Render](https://render.com)
-2. Melde dich mit GitHub an
+2. Klicke auf **"Get Started for Free"**
+3. Melde dich mit GitHub an (empfohlen)
 
-### Schritt 2: Neues Web Service erstellen
+## Schritt 2: PostgreSQL-Datenbank erstellen
+
+**Wichtig:** Erstelle zuerst die Datenbank, damit du die `DATABASE_URL` später kopieren kannst.
+
+1. Im Render Dashboard, klicke auf **"New +"** → **"PostgreSQL"**
+2. Konfiguration:
+   - **Name**: `groop-db` (oder wie du möchtest)
+   - **Database**: `groop` (oder wie du möchtest)
+   - **User**: `groop_user` (oder wie du möchtest)
+   - **Region**: Wähle die Region, die am nächsten zu dir ist
+   - **PostgreSQL Version**: `16` (oder neueste)
+   - **Plan**: **Free** (kostenlos)
+3. Klicke auf **"Create Database"**
+4. Warte, bis die Datenbank erstellt ist (ca. 1-2 Minuten)
+5. **WICHTIG:** Kopiere die **"Internal Database URL"** - du brauchst sie gleich!
+
+## Schritt 3: Backend-Service erstellen
 
 1. Klicke auf **"New +"** → **"Web Service"**
 2. Verbinde dein GitHub-Repository: `KaiHnieda/grooop`
 3. Wähle das Repository aus
 
-### Schritt 3: Service konfigurieren
+## Schritt 4: Service konfigurieren
+
+Fülle folgende Felder aus:
 
 - **Name**: `groop-backend` (oder wie du möchtest)
-- **Root Directory**: `backend`
+- **Region**: Wähle die gleiche Region wie bei der Datenbank
+- **Branch**: `main`
+- **Root Directory**: `backend` ⚠️ **WICHTIG!**
 - **Environment**: `Node`
 - **Build Command**: `npm install && npm run build && npx prisma generate`
 - **Start Command**: `npm start`
+- **Plan**: **Free** (kostenlos)
 
-### Schritt 4: Environment Variables setzen
+## Schritt 5: Environment Variables setzen
 
-Füge folgende Environment Variables hinzu:
+Scroll nach unten zu **"Environment Variables"** und füge hinzu:
 
-```
-DATABASE_URL=postgresql://user:password@host:5432/dbname
-JWT_SECRET=<generiere-ein-sicheres-secret>
-PORT=3001
-NODE_ENV=production
-FRONTEND_URL=https://deine-netlify-url.netlify.app
-```
+1. **DATABASE_URL**: 
+   - Füge die **Internal Database URL** ein, die du in Schritt 2 kopiert hast
+   - Format: `postgresql://user:password@host:5432/database`
 
-### Schritt 5: PostgreSQL-Datenbank hinzufügen
+2. **JWT_SECRET**: 
+   - Generiere ein sicheres Secret (mindestens 32 Zeichen)
+   - Führe lokal aus:
+     ```bash
+     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+     ```
+   - Kopiere den generierten Wert und füge ihn ein
 
-1. Klicke auf **"New +"** → **"PostgreSQL"**
-2. Render erstellt eine Datenbank
-3. Kopiere die **Internal Database URL** und setze sie als `DATABASE_URL`
+3. **PORT**: 
+   - `3001` (oder lass es leer, Render setzt es automatisch)
 
-### Schritt 6: Prisma Migration
+4. **NODE_ENV**: 
+   - `production`
 
-Nach dem ersten Deployment:
-1. Öffne die **Shell** in Render
-2. Führe aus: `npx prisma migrate deploy`
+5. **FRONTEND_URL**: 
+   - Deine Netlify-URL (z.B. `https://voluble-sawine-19bcc7.netlify.app`)
+   - **Wichtig:** Kein Slash am Ende!
 
-### Schritt 7: Backend-URL finden
+## Schritt 6: Service erstellen
 
-Render gibt dir eine URL wie: `https://groop-backend.onrender.com`
+1. Klicke auf **"Create Web Service"**
+2. Render startet automatisch den Build-Prozess
+3. Warte, bis der Build fertig ist (ca. 3-5 Minuten)
 
-### Schritt 8: Environment Variables in Netlify setzen
+## Schritt 7: Prisma Migration ausführen
 
-Wie bei Railway, setze in Netlify:
-```
-VITE_API_URL=https://groop-backend.onrender.com/api
-VITE_SOCKET_URL=https://groop-backend.onrender.com
-```
+Nach dem ersten Deployment musst du die Datenbank-Migration ausführen:
+
+1. Gehe zu deinem Backend-Service in Render
+2. Klicke auf den Tab **"Shell"** (oben rechts)
+3. Führe aus:
+   ```bash
+   npx prisma migrate deploy
+   ```
+4. Warte, bis die Migration erfolgreich ist
+
+**Alternative:** Du kannst auch lokal die Migration ausführen, wenn du die `DATABASE_URL` temporär setzt.
+
+## Schritt 8: Backend-URL finden
+
+1. Nach erfolgreichem Deployment zeigt Render eine URL an
+2. Format: `https://groop-backend.onrender.com`
+3. **Kopiere diese URL** - du brauchst sie für Netlify
+
+**Hinweis:** Bei kostenlosen Services kann es beim ersten Aufruf etwas länger dauern (Cold Start), da der Service nach Inaktivität "einschläft".
+
+## Schritt 9: Environment Variables in Netlify setzen
+
+1. Gehe zu deinem Netlify-Dashboard
+2. Öffne: **Site settings → Environment variables**
+3. Füge hinzu:
+   ```
+   VITE_API_URL=https://groop-backend.onrender.com/api
+   VITE_SOCKET_URL=https://groop-backend.onrender.com
+   ```
+4. Ersetze `groop-backend.onrender.com` mit deiner tatsächlichen Render-URL
+
+## Schritt 10: Frontend neu deployen
+
+Netlify deployt automatisch neu, oder klicke auf **"Trigger deploy"** → **"Deploy site"**
 
 ---
 
@@ -161,12 +134,12 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ### DATABASE_URL Format
 
-Für PostgreSQL sollte die URL so aussehen:
+Die `DATABASE_URL` von Render sieht so aus:
 ```
-postgresql://username:password@host:5432/database
+postgresql://user:password@host:5432/database
 ```
 
-Render setzt diese automatisch, wenn du ihre PostgreSQL-Datenbank verwendest.
+**Wichtig:** Verwende die **Internal Database URL**, nicht die externe URL!
 
 ### Prisma Migration
 
@@ -175,14 +148,17 @@ Render setzt diese automatisch, wenn du ihre PostgreSQL-Datenbank verwendest.
 npx prisma migrate deploy
 ```
 
-Oder in Render Shell:
-```bash
-npx prisma migrate deploy
-```
+Du kannst das in der Render Shell machen (siehe Schritt 7).
 
 ### CORS-Konfiguration
 
 Das Backend ist bereits so konfiguriert, dass es die Frontend-URL aus `FRONTEND_URL` verwendet. Stelle sicher, dass diese Variable korrekt gesetzt ist.
+
+### Free Plan Limits
+
+- **750 Stunden Laufzeit pro Monat** (genug für 24/7)
+- Service "schläft" nach 15 Minuten Inaktivität (wacht beim nächsten Request auf)
+- Erster Request kann etwas länger dauern (Cold Start)
 
 ---
 
@@ -190,31 +166,59 @@ Das Backend ist bereits so konfiguriert, dass es die Frontend-URL aus `FRONTEND_
 
 ### Backend startet nicht
 
-- Prüfe die Logs in Railway/Render
+- Prüfe die **Logs** in Render (Tab "Logs")
 - Stelle sicher, dass alle Environment Variables gesetzt sind
 - Prüfe, ob `DATABASE_URL` korrekt ist
+- Prüfe, ob `Root Directory` auf `backend` gesetzt ist
 
 ### Datenbank-Verbindung fehlgeschlagen
 
 - Prüfe, ob die PostgreSQL-Datenbank läuft
-- Stelle sicher, dass `DATABASE_URL` korrekt ist
-- Führe `npx prisma migrate deploy` aus
+- Stelle sicher, dass `DATABASE_URL` die **Internal Database URL** ist
+- Führe `npx prisma migrate deploy` aus (siehe Schritt 7)
 
 ### Frontend kann Backend nicht erreichen
 
 - Prüfe, ob `VITE_API_URL` in Netlify korrekt gesetzt ist
 - Prüfe, ob das Backend läuft (öffne die URL im Browser)
 - Prüfe CORS-Einstellungen im Backend
+- Bei kostenlosen Services: Warte nach dem ersten Request (Cold Start)
+
+### Build schlägt fehl
+
+- Prüfe, ob `Root Directory` auf `backend` gesetzt ist
+- Prüfe die Build-Logs in Render
+- Stelle sicher, dass alle Dependencies in `package.json` vorhanden sind
 
 ---
 
 ## Nächste Schritte
 
 Nach erfolgreichem Deployment:
-1. ✅ Backend läuft auf Railway/Render
-2. ✅ Environment Variables in Netlify gesetzt
-3. ✅ Frontend deployed auf Netlify
-4. ✅ App sollte jetzt funktionieren!
+1. ✅ Backend läuft auf Render (kostenlos)
+2. ✅ PostgreSQL-Datenbank läuft (kostenlos)
+3. ✅ Environment Variables in Netlify gesetzt
+4. ✅ Frontend deployed auf Netlify
+5. ✅ App sollte jetzt funktionieren!
 
-Viel Erfolg! 🚀
+**Viel Erfolg! 🚀**
+
+---
+
+## Alternative: Andere kostenlose Optionen
+
+Falls Render nicht funktioniert, hier sind andere kostenlose Alternativen:
+
+### Fly.io
+- Kostenloser Plan verfügbar
+- Ähnlich wie Render
+- Website: https://fly.io
+
+### Supabase (nur für Datenbank)
+- Kostenlose PostgreSQL-Datenbank
+- Website: https://supabase.com
+
+### PlanetScale (nur für Datenbank)
+- Kostenlose MySQL-Datenbank
+- Website: https://planetscale.com
 
