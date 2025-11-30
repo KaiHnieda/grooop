@@ -16,6 +16,27 @@ Diese App besteht aus zwei Teilen:
 
 ### 2. Build-Einstellungen in Netlify
 
+**WICHTIG für Monorepo/Workspace-Setup:**
+
+Da diese App ein Monorepo mit Workspace-Packages (`@groop/shared`) verwendet, muss der Build-Befehl zuerst im Root installieren, bevor das Frontend gebaut wird.
+
+**In Netlify UI (Site settings → Build & deploy → Build settings):**
+
+- **Build command**: 
+  ```
+  npm install && cd frontend && npm run build
+  ```
+  ⚠️ **NICHT** `cd frontend && npm install && npm run build` - das würde `@groop/shared` nicht finden!
+
+- **Publish directory**: 
+  ```
+  frontend/dist
+  ```
+
+- **Base directory**: (leer lassen)
+
+**Alternative:** Wenn du die `netlify.toml` verwenden möchtest (sie liegt im Root), lösche die Build-Einstellungen in der UI, damit die `netlify.toml` verwendet wird.
+
 - **Branch to deploy**: 
   - **Option 1**: Prüfe auf GitHub/GitLab, welcher Branch tatsächlich existiert und trage diesen Namen ein (meistens `main` oder `master`)
   - **Option 2**: Wenn Netlify den Wert nicht akzeptiert:
@@ -23,9 +44,6 @@ Diese App besteht aus zwei Teilen:
     2. Netlify wird automatisch den Standard-Branch verwenden
     3. Nach dem ersten Deploy kannst du in den Einstellungen den Branch ändern
   - **Option 3**: Erstelle zuerst einen Commit und pushe zu GitHub, dann sollte Netlify die Branches erkennen
-- **Build command**: `cd frontend && npm run build`
-- **Publish directory**: `frontend/dist`
-- **Base directory**: (leer lassen)
 
 **Wichtig**: 
 - Branch-Namen sind **case-sensitive** (Groß-/Kleinschreibung ist wichtig)
