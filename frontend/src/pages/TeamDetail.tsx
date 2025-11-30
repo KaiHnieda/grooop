@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Users, ArrowLeft, UserPlus, Trash2, Folder } from 'lucide-react';
 import { teamService } from '../services/teamService';
 import { workspaceService } from '../services/workspaceService';
-import type { Team, Workspace } from '@groop/shared';
+import type { Team, Workspace, TeamMember } from '@groop/shared';
 
 export default function TeamDetail() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -144,7 +144,7 @@ export default function TeamDetail() {
         )}
 
         <div className="space-y-2">
-          {team.members?.map((member) => (
+          {team.members?.map((member: TeamMember) => (
             <div
               key={member.id}
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
