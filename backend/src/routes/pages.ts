@@ -40,7 +40,7 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     // Check if user has access to workspace
     const workspace = await prisma.workspace.findFirst({
@@ -123,7 +123,7 @@ router.get('/:id', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     // Check access
     const workspace = await prisma.workspace.findFirst({
@@ -209,7 +209,7 @@ router.post('/', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     // Check workspace access
     const workspace = await prisma.workspace.findFirst({
@@ -303,7 +303,7 @@ router.put('/:id', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     // Check access
     const workspace = await prisma.workspace.findFirst({
@@ -396,7 +396,7 @@ router.delete('/:id', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     // Check if user is creator or workspace owner or team admin
     const workspace = await prisma.workspace.findFirst({

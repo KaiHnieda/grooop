@@ -32,7 +32,7 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     const workspaces = await prisma.workspace.findMany({
       where: {
@@ -116,7 +116,7 @@ router.get('/:id', authenticate, async (req: AuthRequest, res) => {
       },
       select: { id: true },
     });
-    const teamIds = userTeams.map(t => t.id);
+    const teamIds = userTeams.map((t: { id: string }) => t.id);
 
     const workspace = await prisma.workspace.findFirst({
       where: {
