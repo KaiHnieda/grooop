@@ -1,5 +1,5 @@
 import api from './api';
-import type { Workspace, WorkspaceCreateInput, ApiResponse } from '@groop/shared';
+import type { Workspace, WorkspaceCreateInput, ApiResponse } from '../types';
 
 export const workspaceService = {
   async getAll(): Promise<Workspace[]> {

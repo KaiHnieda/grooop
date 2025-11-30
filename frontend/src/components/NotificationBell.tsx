@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
 import { notificationService } from '../services/notificationService';
-import type { Notification } from '@groop/shared';
+import type { Notification } from '../types';
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);

@@ -1,5 +1,5 @@
 import api from './api';
-import type { AuthResponse } from '@groop/shared';
+import type { AuthResponse } from '../types';
 
 export const authService = {
   async login(email: string, password: string): Promise<AuthResponse> {

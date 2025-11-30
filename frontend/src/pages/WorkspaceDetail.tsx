@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Plus, FileText, ArrowLeft } from 'lucide-react';
 import { workspaceService } from '../services/workspaceService';
 import { pageService } from '../services/pageService';
-import type { Workspace, Page } from '@groop/shared';
+import type { Workspace, Page } from '../types';
 
 export default function WorkspaceDetail() {
   const { workspaceId } = useParams<{ workspaceId: string }>();

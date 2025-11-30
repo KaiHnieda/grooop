@@ -1,5 +1,5 @@
 import api from './api';
-import type { Page, PageCreateInput, ApiResponse } from '@groop/shared';
+import type { Page, PageCreateInput, ApiResponse } from '../types';
 
 export const pageService = {
   async getByWorkspace(workspaceId: string): Promise<Page[]> {

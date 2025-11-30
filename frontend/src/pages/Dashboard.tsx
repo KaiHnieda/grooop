@@ -4,7 +4,7 @@ import { Cloud, List, Grid, FileText, Folder } from 'lucide-react';
 import { workspaceService } from '../services/workspaceService';
 import { recentActivityService } from '../services/recentActivityService';
 import { useCreateWorkspace } from '../contexts/CreateWorkspaceContext';
-import type { Workspace } from '@groop/shared';
+import type { Workspace } from '../types';
 import WorkspaceCard from '../components/WorkspaceCard';
 
 type ViewMode = 'grid' | 'list';

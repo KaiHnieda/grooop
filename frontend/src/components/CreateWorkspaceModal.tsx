@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { workspaceService } from '../services/workspaceService';
 import { teamService } from '../services/teamService';
-import type { Workspace, WorkspaceCreateInput, Team } from '@groop/shared';
+import type { Workspace, WorkspaceCreateInput, Team } from '../types';
 
 interface CreateWorkspaceModalProps {
   onClose: () => void;

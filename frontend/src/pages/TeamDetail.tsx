@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Users, ArrowLeft, UserPlus, Trash2, Folder } from 'lucide-react';
 import { teamService } from '../services/teamService';
 import { workspaceService } from '../services/workspaceService';
-import type { Team, Workspace, TeamMember } from '@groop/shared';
+import type { Team, Workspace, TeamMember } from '../types';
 
 export default function TeamDetail() {
   const { teamId } = useParams<{ teamId: string }>();

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Users, Plus, Settings, Trash2 } from 'lucide-react';
 import { teamService } from '../services/teamService';
 import { useCreateTeam } from '../contexts/CreateTeamContext';
-import type { Team } from '@groop/shared';
+import type { Team } from '../types';
 
 export default function Teams() {
   const [teams, setTeams] = useState<Team[]>([]);

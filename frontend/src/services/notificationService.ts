@@ -1,5 +1,5 @@
 import api from './api';
-import type { Notification, ApiResponse } from '@groop/shared';
+import type { Notification, ApiResponse } from '../types';
 
 export const notificationService = {
   async getAll(): Promise<Notification[]> {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Lightbulb, Trash2 } from 'lucide-react';
 import { ideaService } from '../services/ideaService';
-import type { Idea } from '@groop/shared';
+import type { Idea } from '../types';
 
 export default function Ideas() {
   const [ideas, setIdeas] = useState<Idea[]>([]);

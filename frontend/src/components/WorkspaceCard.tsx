@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
-import type { Workspace } from '@groop/shared';
+import type { Workspace } from '../types';
 
 interface WorkspaceCardProps {
   workspace: Workspace;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { teamService } from '../services/teamService';
-import type { Team, TeamCreateInput } from '@groop/shared';
+import type { Team, TeamCreateInput } from '../types';
 
 interface CreateTeamModalProps {
   onClose: () => void;

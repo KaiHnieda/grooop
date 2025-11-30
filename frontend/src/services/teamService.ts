@@ -1,5 +1,5 @@
 import api from './api';
-import type { Team, TeamCreateInput, ApiResponse } from '@groop/shared';
+import type { Team, TeamCreateInput, ApiResponse } from '../types';
 
 export const teamService = {
   async getAll(): Promise<Team[]> {

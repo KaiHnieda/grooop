@@ -6,7 +6,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { ArrowLeft, Save } from 'lucide-react';
 import { pageService } from '../services/pageService';
 import { useSocket } from '../hooks/useSocket';
-import type { Page } from '@groop/shared';
+import type { Page } from '../types';
 
 export default function PageEditor() {
   const { pageId } = useParams<{ pageId: string }>();

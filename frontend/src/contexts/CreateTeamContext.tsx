@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import CreateTeamModal from '../components/CreateTeamModal';
-import type { Team } from '@groop/shared';
+import type { Team } from '../types';
 
 interface CreateTeamContextType {
   openModal: (successCallback?: (team: Team) => void) => void;

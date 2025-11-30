@@ -1,5 +1,5 @@
 import api from './api';
-import type { Idea, IdeaCreateInput, ApiResponse } from '@groop/shared';
+import type { Idea, IdeaCreateInput, ApiResponse } from '../types';
 
 export const ideaService = {
   async getAll(): Promise<Idea[]> {

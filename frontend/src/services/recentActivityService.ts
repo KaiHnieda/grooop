@@ -1,5 +1,5 @@
 import api from './api';
-import type { ApiResponse } from '@groop/shared';
+import type { ApiResponse } from '../types';
 
 export interface RecentActivity {
   id: string;
