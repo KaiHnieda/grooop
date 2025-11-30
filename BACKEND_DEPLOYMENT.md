@@ -1,8 +1,8 @@
 # Backend Deployment Anleitung
 
-Diese Anleitung zeigt dir Schritt für Schritt, wie du das Backend auf Railway oder Render deployen kannst.
+Diese Anleitung zeigt dir Schritt für Schritt, wie du das Backend kostenlos auf Render deployen kannst.
 
-## Option 1: Railway (Empfohlen - Einfachste Option)
+## Option 1: Render (KOSTENLOS - Empfohlen)
 
 ### Schritt 1: Railway-Account erstellen
 
@@ -166,7 +166,7 @@ Für PostgreSQL sollte die URL so aussehen:
 postgresql://username:password@host:5432/database
 ```
 
-Railway und Render setzen diese automatisch, wenn du ihre PostgreSQL-Datenbank verwendest.
+Render setzt diese automatisch, wenn du ihre PostgreSQL-Datenbank verwendest.
 
 ### Prisma Migration
 
@@ -175,7 +175,7 @@ Railway und Render setzen diese automatisch, wenn du ihre PostgreSQL-Datenbank v
 npx prisma migrate deploy
 ```
 
-Oder in Railway/Render Shell:
+Oder in Render Shell:
 ```bash
 npx prisma migrate deploy
 ```
