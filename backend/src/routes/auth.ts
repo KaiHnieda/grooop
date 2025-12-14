@@ -135,6 +135,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error: any) {
     console.error('Login error:', error);
+    console.error('Error stack:', error.stack);
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         success: false,
@@ -144,7 +145,12 @@ router.post('/login', async (req, res) => {
     }
     res.status(500).json({
       success: false,
-      error: error.message || 'Login fehlgeschlagen',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Anmeldung fehlgeschlagen',
+      ...(process.env.NODE_ENV === 'development' && { 
+        details: error.stack,
+        message: error.message,
+        name: error.name 
+      }),
     });
   }
 });

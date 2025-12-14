@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { workspaceService } from '../services/workspaceService';
 import { teamService } from '../services/teamService';
 import type { Workspace, WorkspaceCreateInput, Team } from '../types';
@@ -53,8 +54,22 @@ export default function CreateWorkspaceModal({ onClose, onSuccess }: CreateWorks
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal-overlay"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
+          transition={{ type: 'spring', duration: 0.3 }}
+          className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 modal-content"
+          onClick={(e) => e.stopPropagation()}
+        >
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold">Neuer Arbeitsbereich</h2>
           <button
@@ -146,8 +161,9 @@ export default function CreateWorkspaceModal({ onClose, onSuccess }: CreateWorks
             </button>
           </div>
         </form>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 

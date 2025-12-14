@@ -36,6 +36,9 @@ export function setupSocketIO(io: Server) {
   io.on('connection', (socket: Socket) => {
     const userId = (socket as any).userId;
 
+    // Join user-specific room for notifications
+    socket.join(`user:${userId}`);
+
     socket.on('join-page', async (pageId: string) => {
       socket.join(`page:${pageId}`);
 

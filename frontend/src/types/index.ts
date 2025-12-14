@@ -25,10 +25,12 @@ export interface Workspace {
   name: string;
   description?: string;
   imageUrl?: string;
+  color?: string;
   ownerId: string;
   teamId?: string;
   createdAt: Date;
   updatedAt: Date;
+  lastAccessedAt?: Date;
   members?: WorkspaceMember[];
   team?: {
     id: string;
@@ -144,4 +146,6 @@ export interface AuthResponse {
   user: User;
   token: string;
 }
+
+
 

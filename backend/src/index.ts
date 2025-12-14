@@ -10,8 +10,13 @@ import ideaRoutes from './routes/ideas.js';
 import notificationRoutes from './routes/notifications.js';
 import recentActivityRoutes from './routes/recentActivity.js';
 import teamRoutes from './routes/teams.js';
+import uploadRoutes from './routes/uploads.js';
 import { setupSocketIO } from './services/socketService.js';
+import { setNotificationIO } from './services/notificationService.js';
 import { validateEnv } from './utils/validateEnv.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import express from 'express';
 
 dotenv.config();
 
@@ -27,11 +32,22 @@ const httpServer = createServer(app);
 // CORS-Origins konfigurieren (für Netlify + lokale Entwicklung)
 const allowedOrigins = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:5173'];
+  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'];
 
 const io = new Server(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // In Entwicklung: Erlaube alle localhost-Ports
+      if (process.env.NODE_ENV === 'development' && origin && origin.startsWith('http://localhost:')) {
+        return callback(null, true);
+      }
+      // Prüfe ob Origin erlaubt ist
+      if (!origin || allowedOrigins.includes(origin) || allowedOrigins.some(allowed => origin.startsWith(allowed))) {
+        callback(null, true);
+      } else {
+        callback(new Error('Nicht erlaubt durch CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -45,6 +61,11 @@ app.use(cors({
     // Erlaube Requests ohne Origin (z.B. Postman, mobile Apps)
     if (!origin) return callback(null, true);
     
+    // In Entwicklung: Erlaube alle localhost-Ports
+    if (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    
     // Prüfe ob Origin erlaubt ist
     if (allowedOrigins.includes(origin) || allowedOrigins.some(allowed => origin?.startsWith(allowed))) {
       callback(null, true);
@@ -56,6 +77,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Statische Dateien für Uploads
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/workspaces', workspaceRoutes);
@@ -64,6 +90,7 @@ app.use('/api/ideas', ideaRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/recent-activity', recentActivityRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/uploads', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -91,6 +118,7 @@ app.use((req, res) => {
 
 // Setup Socket.io
 setupSocketIO(io);
+setNotificationIO(io);
 
 httpServer.listen(PORT, () => {
   console.log(`Server läuft auf Port ${PORT}`);

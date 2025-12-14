@@ -3,9 +3,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { ArrowLeft, Save } from 'lucide-react';
+import CodeBlock from '@tiptap/extension-code-block';
+import Blockquote from '@tiptap/extension-blockquote';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import Image from '@tiptap/extension-image';
+import { Callout } from '../extensions/Callout';
+import { ArrowLeft, Save, Image as ImageIcon } from 'lucide-react';
 import { pageService } from '../services/pageService';
 import { useSocket } from '../hooks/useSocket';
+import EditorToolbar from '../components/EditorToolbar';
+import ImageUpload from '../components/ImageUpload';
+import Spinner from '../components/Spinner';
 import type { Page } from '../types';
 
 export default function PageEditor() {
@@ -15,6 +26,7 @@ export default function PageEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   const { socket, connected } = useSocket();
 
@@ -23,6 +35,25 @@ export default function PageEditor() {
       StarterKit,
       Placeholder.configure({
         placeholder: 'Beginne mit dem Schreiben...',
+      }),
+      CodeBlock.configure({
+        HTMLAttributes: {
+          class: 'code-block',
+        },
+      }),
+      Blockquote,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Image.configure({
+        inline: true,
+        allowBase64: false,
+      }),
+      Callout.configure({
+        types: ['info', 'warning', 'success', 'error'],
       }),
     ],
     content: '',
@@ -106,7 +137,7 @@ export default function PageEditor() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-gray-500">Lädt...</div>
+        <Spinner size="lg" />
       </div>
     );
   }
@@ -143,11 +174,23 @@ export default function PageEditor() {
             disabled={saving}
             className="btn-primary flex items-center gap-2 disabled:opacity-50"
           >
-            <Save className="w-4 h-4" />
-            {saving ? 'Speichert...' : 'Speichern'}
+            {saving ? (
+              <>
+                <Spinner size="sm" />
+                Speichert...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                Speichern
+              </>
+            )}
           </button>
         </div>
       </div>
+
+      {/* Formatting Toolbar */}
+      <EditorToolbar editor={editor} onImageUpload={() => setShowImageUpload(true)} />
 
       {/* Editor */}
       <div className="flex-1 overflow-y-auto bg-white">
@@ -155,6 +198,18 @@ export default function PageEditor() {
           <EditorContent editor={editor} />
         </div>
       </div>
+
+      {showImageUpload && (
+        <ImageUpload
+          onUpload={(url) => {
+            if (editor) {
+              editor.chain().focus().setImage({ src: url }).run();
+            }
+            setShowImageUpload(false);
+          }}
+          onClose={() => setShowImageUpload(false)}
+        />
+      )}
     </div>
   );
 }

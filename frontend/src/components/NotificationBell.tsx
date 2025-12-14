@@ -1,18 +1,34 @@
 import { useState, useEffect } from 'react';
 import { Bell } from 'lucide-react';
 import { notificationService } from '../services/notificationService';
+import { useSocket } from '../hooks/useSocket';
 import type { Notification } from '../types';
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { socket, connected } = useSocket();
 
   useEffect(() => {
     loadNotifications();
     const interval = setInterval(loadNotifications, 30000); // Refresh every 30s
     return () => clearInterval(interval);
   }, []);
+
+  // WebSocket listener for real-time notifications
+  useEffect(() => {
+    if (socket && connected) {
+      socket.on('notification:new', (newNotification: Notification) => {
+        setNotifications((prev) => [newNotification, ...prev]);
+        setUnreadCount((prev) => prev + 1);
+      });
+
+      return () => {
+        socket.off('notification:new');
+      };
+    }
+  }, [socket, connected]);
 
   const loadNotifications = async () => {
     try {

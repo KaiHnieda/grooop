@@ -25,6 +25,20 @@ export const workspaceService = {
   async delete(id: string): Promise<void> {
     await api.delete(`/workspaces/${id}`);
   },
+
+  async addMember(workspaceId: string, email: string): Promise<any> {
+    const response = await api.post<ApiResponse<any>>(`/workspaces/${workspaceId}/members`, { email });
+    return response.data.data!;
+  },
+
+  async removeMember(workspaceId: string, userId: string): Promise<void> {
+    await api.delete(`/workspaces/${workspaceId}/members/${userId}`);
+  },
+
+  async getRecent(): Promise<{ lastAccessed: Workspace[]; newest: Workspace[] }> {
+    const response = await api.get<ApiResponse<{ lastAccessed: Workspace[]; newest: Workspace[] }>>('/workspaces/recent');
+    return response.data.data!;
+  },
 };
 
 

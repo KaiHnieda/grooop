@@ -2,6 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma.js';
 import { authenticate } from '../middleware/auth.js';
+import { createTeamInvitationNotification } from '../services/notificationService.js';
 import type { AuthRequest } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -346,15 +347,7 @@ router.post('/:id/members', authenticate, async (req: AuthRequest, res) => {
     });
 
     // Create notification
-    await prisma.notification.create({
-      data: {
-        userId: user.id,
-        type: 'invitation',
-        title: 'Team-Einladung',
-        message: `Du wurdest zu "${team.name}" eingeladen`,
-        relatedId: team.id,
-      },
-    });
+    await createTeamInvitationNotification(user.id, team.id, team.name);
 
     res.json({
       success: true,

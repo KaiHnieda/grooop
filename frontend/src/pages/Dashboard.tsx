@@ -4,6 +4,7 @@ import { Cloud, List, Grid, FileText, Folder } from 'lucide-react';
 import { workspaceService } from '../services/workspaceService';
 import { recentActivityService } from '../services/recentActivityService';
 import { useCreateWorkspace } from '../contexts/CreateWorkspaceContext';
+import { SkeletonCard, Skeleton } from '../components/Skeleton';
 import type { Workspace } from '../types';
 import WorkspaceCard from '../components/WorkspaceCard';
 
@@ -101,8 +102,15 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-gray-500">Lädt...</div>
+      <div className="p-8">
+        <div className="mb-8">
+          <Skeleton variant="text" width={200} height={32} />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -175,7 +183,7 @@ export default function Dashboard() {
         <div
           className={
             viewMode === 'grid'
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6'
               : 'space-y-4'
           }
         >

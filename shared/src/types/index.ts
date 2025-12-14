@@ -29,6 +29,7 @@ export interface Workspace {
   teamId?: string;
   createdAt: Date;
   updatedAt: Date;
+  lastAccessedAt?: Date;
   members?: WorkspaceMember[];
   team?: {
     id: string;

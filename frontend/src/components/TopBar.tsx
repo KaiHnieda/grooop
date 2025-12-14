@@ -1,13 +1,15 @@
 import { useAuthStore } from '../store/authStore';
-import { Settings, LogOut } from 'lucide-react';
+import { Settings, LogOut, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import NotificationBell from './NotificationBell';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function TopBar() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
+  const { actualTheme, toggleTheme } = useTheme();
 
   const getInitials = (name: string) => {
     return name
@@ -24,19 +26,30 @@ export default function TopBar() {
   };
 
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+    <div className="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
       <div className="flex items-center gap-2">
-        <span className="text-gray-500">Groop</span>
+        <span className="text-gray-500 dark:text-gray-400">Groop</span>
       </div>
       
       <div className="flex items-center gap-4">
+        <button
+          onClick={toggleTheme}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          title={actualTheme === 'dark' ? 'Hell' : 'Dunkel'}
+        >
+          {actualTheme === 'dark' ? (
+            <Sun className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          ) : (
+            <Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          )}
+        </button>
         <NotificationBell />
         <Link
           to="/settings"
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           title="Einstellungen"
         >
-          <Settings className="w-5 h-5 text-gray-600" />
+          <Settings className="w-5 h-5 text-gray-600 dark:text-gray-300" />
         </Link>
         
         <div className="flex items-center gap-3">
@@ -45,10 +58,10 @@ export default function TopBar() {
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             title="Abmelden"
           >
-            <LogOut className="w-5 h-5 text-gray-600" />
+            <LogOut className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
       </div>
