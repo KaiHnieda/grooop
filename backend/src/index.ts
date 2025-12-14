@@ -16,7 +16,6 @@ import { setNotificationIO } from './services/notificationService.js';
 import { validateEnv } from './utils/validateEnv.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import express from 'express';
 
 dotenv.config();
 
